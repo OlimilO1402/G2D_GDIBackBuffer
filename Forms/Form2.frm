@@ -32,10 +32,10 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-Private mGBB As GDIBackBuffer
-Private mbIsRunning As Boolean
-Private mCounter As Long
-Private mTimer   As Single
+Private m_GBB As GDIBackBuffer
+Private m_bIsRunning As Boolean
+Private m_Counter As Long
+Private m_Timer   As Single
 Private Declare Sub Sleep Lib "kernel32" (ByVal ms As Long)
 Private Declare Function Rectangle Lib "gdi32" (ByVal hhdc As Long, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
 
@@ -43,11 +43,11 @@ Private Sub Form_Load()
     Timer1.Interval = 1 '0 '10
     Me.ScaleMode = vbPixels
     Picture1.ScaleMode = vbPixels
-    Set mGBB = GDIBackBuffer(Picture1)
+    Set m_GBB = MNew.GDIBackBuffer(Picture1)
 End Sub
-Public Function GDIBackBuffer(aPB) As GDIBackBuffer 'As PictureBox) As GDIBackBuffer
-    Set GDIBackBuffer = New GDIBackBuffer: GDIBackBuffer.New_ aPB
-End Function
+'Public Function GDIBackBuffer(aPB) As GDIBackBuffer 'As PictureBox) As GDIBackBuffer
+'    Set GDIBackBuffer = New GDIBackBuffer: GDIBackBuffer.New_ aPB
+'End Function
 
 Private Sub Form_Paint()
     Picture1_Resize
@@ -61,30 +61,30 @@ Private Sub Form_Resize()
 End Sub
 
 Private Sub Picture1_DblClick()
-    mbIsRunning = Not mbIsRunning
+    m_bIsRunning = Not m_bIsRunning
     AniTimer
 End Sub
 
 Private Sub Picture1_Paint()
-    mGBB.Paint
+    m_GBB.Paint
 End Sub
 
 Private Sub Picture1_Resize()
-    mGBB.Resize
-    mGBB.Paint
+    m_GBB.Resize
+    m_GBB.Paint
 End Sub
 
 Private Sub AniTimer()
     Dim t As Long: t = 10
-    If mbIsRunning Then
+    If m_bIsRunning Then
         Do
-            If (mCounter Mod t) = 0 Then
-                Dim d As Double: d = Timer - mTimer
-                mTimer = Timer
-                Me.Caption = "Generations: " & CStr(mCounter) & "   " & CStr(CLng(t / d)) & " per sec"
+            If (m_Counter Mod t) = 0 Then
+                Dim d As Double: d = Timer - m_Timer
+                m_Timer = Timer
+                Me.Caption = "Generations: " & CStr(m_Counter) & "   " & CStr(CLng(t / d)) & " per sec"
                 DoEvents
             End If
-            If Not mbIsRunning Then Exit Do
+            If Not m_bIsRunning Then Exit Do
             DrawCells
             Sleep 1 '0
         Loop
@@ -92,14 +92,14 @@ Private Sub AniTimer()
 End Sub
 
 Private Sub DrawCells()
-    mGBB.Clear
+    m_GBB.Clear
     'Picture1.ForeColor = vbBlue 'nope
     Dim n  As Long:    n = 180
     Dim sz As Double: sz = Picture1.ScaleHeight / n
     
     Dim X1 As Long, Y1 As Long
     Dim X2 As Long, Y2 As Long
-    Dim hDC As Long: hDC = mGBB.hDC
+    Dim hDC As Long: hDC = m_GBB.hDC
     Dim i As Long, j As Long
     Dim rrnd As Double
     Randomize
@@ -113,6 +113,6 @@ Private Sub DrawCells()
             End If
         Next
     Next
-    mCounter = mCounter + 1
-    mGBB.Paint
+    m_Counter = m_Counter + 1
+    m_GBB.Paint
 End Sub

@@ -16,42 +16,35 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-Private mGBB As GDIBackBuffer
-Private mPic As GDIBitmap
+Private m_GBB As GDIBackBuffer
+Private m_Pic As GDIBitmap
 Private Const filename As String = "WaterFall.jpg"
 
 Private Sub Form_Load()
     Me.ScaleMode = vbPixels
-    Set mPic = GDIBitmap(App.Path & "\Resources\" & filename)
-    Set mGBB = GDIBackBuffer(Me)
+    Set m_Pic = MNew.GDIBitmap(App.Path & "\Resources\" & filename)
+    Set m_GBB = MNew.GDIBackBuffer(Me)
 End Sub
 
-Public Function GDIBackBuffer(aPB) As GDIBackBuffer 'As PictureBox) As GDIBackBuffer
-    Set GDIBackBuffer = New GDIBackBuffer: GDIBackBuffer.New_ aPB
-End Function
-Public Function GDIBitmap(aPFN As String) As GDIBitmap
-    Set GDIBitmap = New GDIBitmap: GDIBitmap.New_ aPFN
-End Function
-
 Private Sub Form_Resize()
-    mGBB.Resize
-    mGBB.DrawBitmap mPic, Me.ScaleWidth / 2 - mPic.Width2, Me.ScaleHeight / 2 - mPic.Height2
+    m_GBB.Resize
+    m_GBB.DrawBitmap m_Pic, Me.ScaleWidth / 2 - m_Pic.Width2, Me.ScaleHeight / 2 - m_Pic.Height2
     Form_Paint
 End Sub
 
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    mGBB.DrawBitmap mPic, X - mPic.Width2, Y - mPic.Height2
+    m_GBB.DrawBitmap m_Pic, X - m_Pic.Width2, Y - m_Pic.Height2
     Form_Paint
 End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button > 0 Then
-        mGBB.DrawBitmap mPic, X - mPic.Width2, Y - mPic.Height2
+        m_GBB.DrawBitmap m_Pic, X - m_Pic.Width2, Y - m_Pic.Height2
         Form_Paint
     End If
 End Sub
 
 Private Sub Form_Paint()
-    mGBB.Paint
+    m_GBB.Paint
 End Sub
 
